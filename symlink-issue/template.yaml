@@ -1,0 +1,38 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: symlink-test
+  title: Test copying a symlink
+  description: Try using a template that contains a dangling symlink
+spec:
+  owner: myTeam
+  type: service
+
+  parameters:
+    - title: Give some background information
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name for this component
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+
+  steps:
+    - id: fetch
+      name: Fetch template
+      action: fetch:template
+      input:
+        copyWithoutRender:
+        - symlink-in-repo
+        - symlink-outside-repo
+        - symlink-to-non-existing-file
+        url: ./template
+        targetPath: repo
+        values:
+          name: ${{ parameters.name }}
+
